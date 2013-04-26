@@ -23,8 +23,8 @@
  */
 
 
-namespace Malenki\Opt;
-use Malenki\Opt\Arg as Arg;
+namespace Malenki\Argile;
+use Malenki\Argile\Arg as Arg;
 
 class Options
 {
