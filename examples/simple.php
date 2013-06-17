@@ -6,28 +6,31 @@ include('../src/Malenki/Argile/Options.php');
 use Malenki\Argile\Arg as Arg;
 use Malenki\Argile\Options as Options;
 
-Options::add(
-    Arg::createSwitch('switch')
-    ->setShort('s')
-    ->setHelp('I am a very simple switch arg with only short form.')
-);
 
-Options::add(
-    Arg::createValue('foo')
-    ->setShort('f:')
-    ->setLong('foo:')
-    ->setHelp('I am a simple arg with short and long form.')
-);
+$opt = Options::getInstance();
 
-Options::getInstance()->parse();
+$opt->switch('switch')
+    ->short('s')
+    ->help('I am a very simple switch arg with only short form.')
+    ;
 
-if(Options::getInstance()->has('switch')){
+$opt->value('foo')
+    ->required()
+    ->short('f')
+    ->long('foo')
+    ->help('I am a simple arg with short and long forms.')
+    ;
+
+
+$opt->parse();
+
+if($opt->has('switch')){
     printf("\n\"switch\" arg selected!\n\n");
     exit();
 }
 
-if(Options::getInstance()->has('foo')){
-    printf("\n\"foo\" arg selected! Its value is: \"%s\"\n\n", Options::getInstance()->get('foo'));
+if($opt->has('foo')){
+    printf("\n\"foo\" arg selected! Its value is: \"%s\"\n\n", $opt->get('foo'));
     exit();
 }
 

@@ -76,24 +76,24 @@ class Options
     }
 
 
-    public function setUsage($str)
+    public function usage($str)
     {
         $this->str_usage = $str;
     }
 
-    public function setDescription($str)
+    public function description($str)
     {
         $this->str_description = $str;
     }
     
     
-    public function setHelp($str)
+    public function help($str)
     {
         $this->str_help = $str;
     }
     
     
-    public function setVersion($str)
+    public function version($str)
     {
         $this->str_version = $str;
     }
@@ -178,7 +178,7 @@ class Options
         {
             foreach($group->args as $arg)
             {
-                $arr_out[] = $arg->getShort();
+                $arr_out[] = $arg->getLong();
             }
 
         }
