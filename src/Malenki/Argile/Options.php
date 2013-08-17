@@ -33,6 +33,10 @@ class Options
     protected static $arr_group = array();
     protected static $arr_prohibited = array('h', 'help', 'version');
     protected $arr_parsed = array();
+    
+    protected $arr_switch = array();
+    protected $arr_values = array();
+
     protected $str_usage = null;
     protected $str_description = null;
     protected $str_help = 'Display this help message and exit';
@@ -102,10 +106,11 @@ class Options
     {
         if(!isset(self::$arr_group[$str_alias]))
         {
-            self::$arr_group[$str_alias] = (object) array(
-                'name' => (strlen($str_name)) ? $str_name : null,
-                'args' => array()
-            );
+            $grp = new \stdClass();
+            $grp->name = (strlen($str_name)) ? $str_name : null;
+            $grp->args = array();
+
+            self::$arr_group[$str_alias] = $grp;
         }
     }
 
@@ -147,7 +152,7 @@ class Options
         {
             if($arg->hasShort())
             {
-                $str_out .= $arg->getShort();
+                $str_out .= $arg->getShort(true);
             }
         }
 
@@ -155,7 +160,7 @@ class Options
         {
             foreach($group->args as $arg)
             {
-                $str_out .= $arg->getShort();
+                $str_out .= $arg->getShort(true);
             }
 
         }
@@ -170,7 +175,7 @@ class Options
         {
             if($arg->hasLong())
             {
-                $arr_out[] = $arg->getLong();
+                $arr_out[] = $arg->getLong(true);
             }
         }
 
@@ -178,14 +183,28 @@ class Options
         {
             foreach($group->args as $arg)
             {
-                $arr_out[] = $arg->getLong();
+                $arr_out[] = $arg->getLong(true);
             }
 
         }
 
         return $arr_out;
     }
- 
+
+
+    public function newSwitch($name, $group = null)
+    {
+        self::add(Arg::createSwitch($name), $group);
+        return self::getArg($name);
+    } 
+
+
+
+    public function newValue($name, $group = null)
+    {
+        self::add(Arg::createValue($name), $group);
+        return self::getArg($name);
+    } 
 
 
     /**
@@ -201,7 +220,7 @@ class Options
 
         if(is_string($this->str_usage))
         {
-            $usage = $this->str_usage;
+            $str_usage = $this->str_usage;
         }
 
         return sprintf('Usage: %s %s', basename($argv[0]), $str_usage);
@@ -235,14 +254,14 @@ class Options
 
         // On ajoute les options spéciales Help et Version
         self::$arr_group['helpversion']->args[] = Arg::createSwitch('help')
-            ->setShort('h')
-            ->setLong('help')
-            ->setHelp($this->str_help)
+            ->short('h')
+            ->long('help')
+            ->help($this->str_help)
         ;
 
         self::$arr_group['helpversion']->args[] = Arg::createSwitch('version')
-            ->setLong('version')
-            ->setHelp($this->str_version)
+            ->long('version')
+            ->help($this->str_version)
         ;
 
         // Les options non incluses dans un groupe
@@ -293,9 +312,9 @@ class Options
             is_object($arg)
             &&
             (
-                isset($this->arr_parsed[$arg->getLong(true)])
+                isset($this->arr_parsed[$arg->getLong()])
                 ||
-                (isset($this->arr_parsed[$arg->getShort(true)])
+                (isset($this->arr_parsed[$arg->getShort()])
             )
         );
     }
@@ -339,13 +358,13 @@ class Options
     {
         $arg = self::getArg($str);
 
-        if(isset($this->arr_parsed[$arg->getLong(true)]))
+        if(isset($this->arr_parsed[$arg->getLong()]))
         {
-            return $this->arr_parsed[$arg->getLong(true)];
+            return $this->arr_parsed[$arg->getLong()];
         }
         else
         {
-            return $this->arr_parsed[$arg->getShort(true)];
+            return $this->arr_parsed[$arg->getShort()];
         }
     }	
 }

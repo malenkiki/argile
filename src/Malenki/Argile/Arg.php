@@ -39,6 +39,8 @@ class Arg
     const HELP_LINE_WIDTH = 79;
     const HELP_START_TEXT = 30;
 
+    protected $bool_required = false;
+
     /**
      * L’argument sous sa forme courte.
      *
@@ -127,7 +129,7 @@ class Arg
      * @param string $str
      * @return string
      */
-    protected function removeColon($str)
+    protected static function removeColon($str)
     {
         return preg_replace('/:+/', '', $str);
     }
@@ -137,32 +139,37 @@ class Arg
         return $this->int_type == self::ARG_VALUE;
     }
 
-    public function isOptionalValue()
+
+
+    public function required()
     {
-        return(
-            preg_match(sprintf('/%s$/', self::ARG_OPTIONAL_VALUE), $this->str_short)
-            ||
-            preg_match(sprintf('/%s$/', self::ARG_OPTIONAL_VALUE), $this->str_long)
-        );
+        $this->bool_required = true;
+        return $this;
     }
+
+
     
     
     public function isRequiredValue()
     {
+        /*
         return(
             preg_match(sprintf('/%s$/', self::ARG_REQUIRED_VALUE), $this->str_short)
             ||
             preg_match(sprintf('/%s$/', self::ARG_REQUIRED_VALUE), $this->str_long)
         );
+         */
+        return $this->bool_required;
     }
 
     /**
      * @param string $str
      * @return Arg L’objet lui-même est retourné pour chaîner…
      */
-    public function setShort($str)
+    public function short($str)
     {
-        $this->str_short = (strlen($str)) ? $str : null;
+     //   $this->bool_required = (boolean) preg_match(sprintf('/%s$/', self::ARG_REQUIRED_VALUE), $str);
+        $this->str_short = (strlen($str)) ? self::removeColon($str) : null;
         return $this;
     }
 
@@ -170,18 +177,10 @@ class Arg
      * @param string $str
      * @return Arg L’objet lui-même est retourné pour chaîner…
      */
-    public function setLong($str)
+    public function long($str)
     {
-        $this->str_long = (strlen($str)) ? $str : null;
-        return $this;
-    }
-
-    public function setVarHelp($str)
-    {
-        if(is_string($str) && strlen(trim($str)))
-        {
-            $this->str_var_help = mb_strtoupper($str, 'UTF-8');
-        }
+       // $this->bool_required = (boolean) preg_match(sprintf('/%s$/', self::ARG_REQUIRED_VALUE), $str);
+        $this->str_long = (strlen($str)) ? self::removeColon($str) : null;
         return $this;
     }
 
@@ -190,9 +189,15 @@ class Arg
      * @param string $str
      * @return Arg L’objet lui-même est retourné pour chaîner…
      */
-    public function setHelp($str)
+    public function help($str, $str_var = null)
     {
         $this->str_help = (strlen($str)) ? $str : null;
+
+        if(is_string($str_var) && strlen(trim($str_var)))
+        {
+            $this->str_var_help = mb_strtoupper($str_var, 'UTF-8');
+        }
+
         return $this;
     }
 
@@ -223,30 +228,58 @@ class Arg
 
 
     /**
-     * @param boolean $without_colon
      * @return string
      */
-    public function getShort($without_colon = false)
+    public function getShort($as_getopt = false)
     {
-        if($without_colon)
+        if(!$as_getopt)
         {
-            return $this->removeColon($this->str_short);
+            return $this->str_short;
         }
-        return $this->str_short;
+        else
+        {
+            if(!$this->isValue())
+            {
+                return $this->str_short;
+            }
+
+            if($this->isRequiredValue())
+            {
+                return $this->str_short . self::ARG_REQUIRED_VALUE;
+            }
+            else
+            {
+                return $this->str_short . self::ARG_OPTIONAL_VALUE;
+            }
+        }
     }
 
 
     /**
-     * @param boolean $without_colon
      * @return string
      */
-    public function getLong($without_colon = false)
+    public function getLong($as_getopt = false)
     {
-        if($without_colon)
+        if(!$as_getopt)
         {
-            return $this->removeColon($this->str_long);
+            return $this->str_long;
         }
-        return $this->str_long;
+        else
+        {
+            if(!$this->isValue())
+            {
+                return $this->str_long;
+            }
+
+            if($this->isRequiredValue())
+            {
+                return $this->str_long . self::ARG_REQUIRED_VALUE;
+            }
+            else
+            {
+                return $this->str_long . self::ARG_OPTIONAL_VALUE;
+            }
+        }
     }
 
     /**
@@ -277,13 +310,13 @@ class Arg
 
         if($this->isValue())
         {
-            if($this->isOptionalValue())
+            if($this->isRequiredValue())
             {
-                $str_var_help = sprintf('[=%s]', $this->str_var_help);
+                $str_var_help = sprintf('=%s', $this->str_var_help);
             }
             else
             {
-                $str_var_help = sprintf('=%s', $this->str_var_help);
+                $str_var_help = sprintf('[=%s]', $this->str_var_help);
             }
         }
 
@@ -292,17 +325,17 @@ class Arg
         {
             $str_arg = sprintf(
                 '  -%s, --%s',
-                $this->removeColon($this->str_short),
-                $this->removeColon($this->str_long) . $str_var_help
+                self::removeColon($this->str_short),
+                self::removeColon($this->str_long) . $str_var_help
             );
         }
         else if(!is_null($this->str_long))
         {
-            $str_arg = sprintf('      --%s', $this->removeColon($this->str_long) . $str_var_help);
+            $str_arg = sprintf('      --%s', self::removeColon($this->str_long) . $str_var_help);
         }
         else if(!is_null($this->str_short))
         {
-            $str_arg = sprintf('  -%s', $this->removeColon($this->str_short) . $str_var_help);
+            $str_arg = sprintf('  -%s', self::removeColon($this->str_short) . $str_var_help);
         }
 
         if(mb_strlen($str_arg, 'UTF-8') < 29)
