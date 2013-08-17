@@ -106,10 +106,11 @@ class Options
     {
         if(!isset(self::$arr_group[$str_alias]))
         {
-            self::$arr_group[$str_alias] = (object) array(
-                'name' => (strlen($str_name)) ? $str_name : null,
-                'args' => array()
-            );
+            $grp = new \stdClass();
+            $grp->name = (strlen($str_name)) ? $str_name : null;
+            $grp->args = array();
+
+            self::$arr_group[$str_alias] = $grp;
         }
     }
 
@@ -219,7 +220,7 @@ class Options
 
         if(is_string($this->str_usage))
         {
-            $usage = $this->str_usage;
+            $str_usage = $this->str_usage;
         }
 
         return sprintf('Usage: %s %s', basename($argv[0]), $str_usage);
