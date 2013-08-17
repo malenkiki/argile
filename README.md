@@ -58,4 +58,4 @@ if($opt->has('bar'))
 exit();
 ```
 
-For more examples, please look at `example/` directory included into source tree.
+For more examples, please look at `examples` directory included into source tree.
