@@ -55,7 +55,7 @@ class Options
 
     public function flexible()
     {
-
+        Arg::flexible();
     }
 
     /**
