@@ -53,6 +53,10 @@ class Options
         return self::$obj_instance;
     }
 
+    public function flexible()
+    {
+
+    }
 
     /**
      * Examine les paramètres fournis en ligne de commande.

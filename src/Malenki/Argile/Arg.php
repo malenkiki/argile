@@ -40,6 +40,7 @@ class Arg
     const HELP_START_TEXT = 30;
 
     protected $bool_required = false;
+    protected static $bool_flexible = false;
 
     /**
      * L’argument sous sa forme courte.
@@ -123,6 +124,29 @@ class Arg
     public static function createValue($name)
     {
         return new self(self::ARG_VALUE, $name);
+    }
+
+    public static function flexible()
+    {
+        self::$bool_flexible = true;
+    }
+
+    public function getWidth()
+    {
+        if(self::$bool_flexible && function_exists('shell_exec'))
+        {
+            $out = shell_exec('stty -a');
+            $arr = array();
+            $found = (boolean) preg_match('/([0-9 ]*)columns([0-9 ]*)/', $out, $arr);
+
+            if($found)
+            {
+                //TODO use $arr to finish
+                return strlen($arr[1]) ? (int) trim($arr[1]) : (int) trim($arr[2]);
+            }
+        }
+
+        return self::HELP_LINE_WIDTH;
     }
 
     /**
