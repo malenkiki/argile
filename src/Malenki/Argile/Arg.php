@@ -40,6 +40,7 @@ class Arg
     const HELP_START_TEXT = 30;
 
     protected $bool_required = false;
+    protected static $bool_flexible = false;
 
     /**
      * L’argument sous sa forme courte.
@@ -123,6 +124,28 @@ class Arg
     public static function createValue($name)
     {
         return new self(self::ARG_VALUE, $name);
+    }
+
+    public static function flexible()
+    {
+        self::$bool_flexible = true;
+    }
+
+    public static function getWidth()
+    {
+        if(self::$bool_flexible && function_exists('shell_exec'))
+        {
+            $out = shell_exec('stty -a');
+            $arr = array();
+            $found = (boolean) preg_match('/([0-9 ]*)columns([0-9 ]*)/', $out, $arr);
+
+            if($found)
+            {
+                return strlen(trim($arr[1])) ? (int) trim($arr[1]) : (int) trim($arr[2]);
+            }
+        }
+
+        return self::HELP_LINE_WIDTH;
     }
 
     /**
@@ -338,9 +361,9 @@ class Arg
             $str_arg = sprintf('  -%s', self::removeColon($this->str_short) . $str_var_help);
         }
 
-        if(mb_strlen($str_arg, 'UTF-8') < 29)
+        if(mb_strlen($str_arg, 'UTF-8') < self::HELP_START_TEXT - 1)
         {
-            $str_arg = $str_arg . str_repeat(' ', 29 - mb_strlen($str_arg, 'UTF-8'));
+            $str_arg = $str_arg . str_repeat(' ', self::HELP_START_TEXT - 1 - mb_strlen($str_arg, 'UTF-8'));
         }
         else
         {
@@ -350,8 +373,8 @@ class Arg
         if($this->str_help)
         {
             $str_help = preg_replace(
-                '/(?=\s)(.{1,'. (79 - 29) .'})(?:\s|$)/uS',
-                "$1\n".str_repeat(' ', 29),
+                '/(?=\s)(.{1,'. (self::getWidth() - self::HELP_START_TEXT - 1) .'})(?:\s|$)/uS',
+                "$1\n".str_repeat(' ', self::HELP_START_TEXT - 1),
                 $this->str_help
             );
         }

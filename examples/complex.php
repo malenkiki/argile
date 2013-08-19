@@ -9,6 +9,8 @@ use Malenki\Argile\Options as Options;
 
 $opt = Options::getInstance();
 
+$opt->flexible();
+
 $opt->usage('Explain in short some CLI usage.');
 $opt->description('Blahblah about your software.');
 $opt->help('Some custom help sentence.');
