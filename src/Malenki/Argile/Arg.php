@@ -178,7 +178,7 @@ class Arg
 
                         if($found)
                         {
-                            return $arr[1];
+                            return (int) $arr[1];
                         }
                     }
                 }
