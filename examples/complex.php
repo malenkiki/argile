@@ -1,7 +1,6 @@
 <?php
-
-include('../src/Malenki/Argile/Arg.php');
-include('../src/Malenki/Argile/Options.php');
+include(preg_replace('@/@', DIRECTORY_SEPARATOR, '../src/Malenki/Argile/Arg.php'));
+include(preg_replace('@/@', DIRECTORY_SEPARATOR, '../src/Malenki/Argile/Options.php'));
 
 use Malenki\Argile\Arg as Arg;
 use Malenki\Argile\Options as Options;

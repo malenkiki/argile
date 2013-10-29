@@ -79,6 +79,8 @@ class Arg
     protected $int_type = self::ARG_SWITCH;
     protected $mixed_value = null;
 
+
+
     /**
      * @param integer $type
      * @param string  $name
@@ -94,6 +96,8 @@ class Arg
         }
     }
 
+
+
     /**
      * @return boolean
      */
@@ -102,10 +106,13 @@ class Arg
         return($this->str_short || $this->str_long);
     }
 
+
+
     public function setValue($value)
     {
         $this->mixed_value = value;
     }
+
 
 
     /**
@@ -117,6 +124,8 @@ class Arg
         return new self(self::ARG_SWITCH, $name);
     }
 
+
+
     /**
      * @param string $name
      * @return Arg
@@ -126,27 +135,60 @@ class Arg
         return new self(self::ARG_VALUE, $name);
     }
 
+
+
     public static function flexible()
     {
         self::$bool_flexible = true;
     }
 
+
+
     public static function getWidth()
     {
         if(self::$bool_flexible && function_exists('shell_exec'))
         {
-            $out = shell_exec('stty -a');
-            $arr = array();
-            $found = (boolean) preg_match('/([0-9 ]*)columns([0-9 ]*)/', $out, $arr);
-
-            if($found)
+            // Linux, Mac…
+            if(DIRECTORY_SEPARATOR == '/')
             {
-                return strlen(trim($arr[1])) ? (int) trim($arr[1]) : (int) trim($arr[2]);
+                if(function_exists('shell_exec'))
+                {
+                    $str_out = shell_exec('stty -a');
+                    $arr = array();
+                    $found = (boolean) preg_match('/([0-9 ]*)columns([0-9 ]*)/', $str_out, $arr);
+
+                    if($found)
+                    {
+                        return strlen(trim($arr[1])) ? (int) trim($arr[1]) : (int) trim($arr[2]);
+                    }
+                }
+            }
+            // Windows
+            else
+            {
+                if(function_exists('exec'))
+                {
+                    $arr_output = array();
+                    $str_out = exec('MODE CON', $arr_output);
+
+                    if(isset($arr_output[4]))
+                    {
+                        $arr = array();
+                        $found = (boolean) preg_match('/([0-9]+)/', $arr_output[4], $arr);
+
+                        if($found)
+                        {
+                            return (int) $arr[1];
+                        }
+                    }
+                }
             }
         }
 
         return self::HELP_LINE_WIDTH;
     }
+
+
 
     /**
      * @param string $str
@@ -156,6 +198,8 @@ class Arg
     {
         return preg_replace('/:+/', '', $str);
     }
+
+
 
     public function isValue()
     {
@@ -172,7 +216,6 @@ class Arg
 
 
     
-    
     public function isRequiredValue()
     {
         /*
@@ -185,6 +228,8 @@ class Arg
         return $this->bool_required;
     }
 
+
+
     /**
      * @param string $str
      * @return Arg L’objet lui-même est retourné pour chaîner…
@@ -196,6 +241,8 @@ class Arg
         return $this;
     }
 
+
+
     /**
      * @param string $str
      * @return Arg L’objet lui-même est retourné pour chaîner…
@@ -206,6 +253,7 @@ class Arg
         $this->str_long = (strlen($str)) ? self::removeColon($str) : null;
         return $this;
     }
+
 
 
     /**
@@ -224,6 +272,8 @@ class Arg
         return $this;
     }
 
+
+
     /**
      * @return boolean
      */
@@ -231,6 +281,8 @@ class Arg
     {
         return(is_string($this->str_short));
     }
+
+
 
     /**
      * @return boolean
@@ -241,6 +293,7 @@ class Arg
     }
 
 
+
     /**
      * @return string
      */
@@ -248,6 +301,7 @@ class Arg
     {
         return $this->str_name;
     }
+
 
 
     /**
@@ -278,6 +332,7 @@ class Arg
     }
 
 
+
     /**
      * @return string
      */
@@ -305,6 +360,8 @@ class Arg
         }
     }
 
+
+
     /**
      * @return string
      */
@@ -313,10 +370,14 @@ class Arg
         return $this->str_help;
     }
 
+
+
     public function getValue()
     {
         return $this->mixed_value;
     }
+
+
 
     /**
      * Dans un contexte de chaîne, affiche l’aide de l’argument.
