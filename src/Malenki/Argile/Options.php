@@ -164,7 +164,10 @@ class Options
         {
             foreach($group->args as $arg)
             {
-                $str_out .= $arg->getShort(true);
+                if($arg->hasShort())
+                {
+                    $str_out .= $arg->getShort(true);
+                }
             }
 
         }
