@@ -24,7 +24,6 @@
 
 
 namespace Malenki\Argile;
-use Malenki\Argile\Arg as Arg;
 
 class Options
 {
@@ -39,8 +38,7 @@ class Options
 
     protected $str_usage = null;
     protected $str_description = null;
-    protected $str_help = 'Display this help message and exit';
-    protected $str_version = 'Display version information and exit';
+    protected $str_version = null;
 
         
     public static function getInstance()
@@ -72,15 +70,48 @@ class Options
      */
     public function parse($bool_display_help = true)
     {
+        self::addGroup('helpversion');
+
+        // On ajoute les options spéciales Help et Version
+        self::$arr_group['helpversion']->args['help'] = Arg::createSwitch('help')
+            ->short('h')
+            ->long('help')
+            ->help('Display this help message and exit')
+        ;
+
+        if($this->hasVersion())
+        {
+            self::$arr_group['helpversion']->args['version'] = Arg::createSwitch('version')
+                ->long('version')
+                ->help('Display version information and exit')
+                ;
+        }
+        
+        
         $this->arr_parsed = getopt(
             $this->getShort(),
             $this->getLong()
         );
 
+
+        $this->displayVersion();
+
+        if($this->has('help'))
+        {
+            $this->displayHelp();
+        }
+
         if(count($this->arr_parsed) == 0 && $bool_display_help)
         {
             $this->displayHelp();
         }
+
+    }
+
+
+    public function noVersion()
+    {
+        $this->has_version = false;
     }
 
 
@@ -92,12 +123,6 @@ class Options
     public function description($str)
     {
         $this->str_description = $str;
-    }
-    
-    
-    public function help($str)
-    {
-        $this->str_help = $str;
     }
     
     
@@ -257,20 +282,6 @@ class Options
         printf("%s\n", $this->getDescription());
         
 
-        self::addGroup('helpversion');
-
-        // On ajoute les options spéciales Help et Version
-        self::$arr_group['helpversion']->args[] = Arg::createSwitch('help')
-            ->short('h')
-            ->long('help')
-            ->help($this->str_help)
-        ;
-
-        self::$arr_group['helpversion']->args[] = Arg::createSwitch('version')
-            ->long('version')
-            ->help($this->str_version)
-        ;
-
         // Les options non incluses dans un groupe
         if(count(self::$arr_arg))
         {
@@ -302,6 +313,27 @@ class Options
         }
 
         exit();
+    }
+
+
+
+    public function hasVersion()
+    {
+        if(is_string($this->str_version) && strlen(trim($this->str_version)))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public function displayVersion()
+    {
+        if($this->has('version') && $this->hasVersion())
+        {
+            printf("%s\n", $this->str_version);
+        }
     }
 
 

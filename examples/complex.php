@@ -12,8 +12,7 @@ $opt->flexible();
 
 $opt->usage('Explain in short some CLI usage.');
 $opt->description('Blahblah about your software.');
-$opt->help('Some custom help sentence.');
-$opt->version('Some blahblah to change version arg sentence.');
+$opt->version('Some App Version 1.0');
 
 $opt->addGroup('one', 'Optional title for first group');
 $opt->addGroup('two', 'Optional title for second group');
