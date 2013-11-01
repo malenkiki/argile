@@ -428,7 +428,7 @@ class Arg
         }
         else
         {
-            $str_arg = $str_arg . "\n";
+            $str_arg = $str_arg . "\n" . str_repeat(' ', self::HELP_START_TEXT - 1);
         }
 
         if($this->str_help)
