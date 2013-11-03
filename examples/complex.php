@@ -1,4 +1,9 @@
 <?php
+require_once(preg_replace('@/@', DIRECTORY_SEPARATOR, '../vendor/malenki/bah/src/Malenki/Bah/O.php'));
+require_once(preg_replace('@/@', DIRECTORY_SEPARATOR, '../vendor/malenki/bah/src/Malenki/Bah/N.php'));
+require_once(preg_replace('@/@', DIRECTORY_SEPARATOR, '../vendor/malenki/bah/src/Malenki/Bah/A.php'));
+require_once(preg_replace('@/@', DIRECTORY_SEPARATOR, '../vendor/malenki/bah/src/Malenki/Bah/S.php'));
+require_once(preg_replace('@/@', DIRECTORY_SEPARATOR, '../vendor/malenki/bah/src/Malenki/Bah/C.php'));
 include(preg_replace('@/@', DIRECTORY_SEPARATOR, '../src/Malenki/Argile/Arg.php'));
 include(preg_replace('@/@', DIRECTORY_SEPARATOR, '../src/Malenki/Argile/Options.php'));
 
