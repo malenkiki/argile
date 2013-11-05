@@ -13,11 +13,19 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "malenki/bah": ">=0.9.1"
     },
     "autoload": {
         "psr-0": {
             "Malenki\\Argile": "src/"
         }
-    }
+    },
+    "include-path": [
+        "vendor/malenki/bah/src/Malenki/Bah/O.php",
+        "vendor/malenki/bah/src/Malenki/Bah/N.php",
+        "vendor/malenki/bah/src/Malenki/Bah/A.php",
+        "vendor/malenki/bah/src/Malenki/Bah/S.php",
+        "vendor/malenki/bah/src/Malenki/Bah/C.php"
+    ]
 }
