@@ -422,95 +422,28 @@ class Arg
             $str_arg = sprintf('  -%s', self::removeColon($this->str_short) . $str_var_help);
         }
 
-        if(mb_strlen($str_arg, 'UTF-8') < self::HELP_START_TEXT - 1)
+        $help = new \Malenki\Bah\S($this->str_help);
+        
+
+        if(self::getWidth() > (self::HELP_START_TEXT * 2))
         {
-            $str_arg = $str_arg . str_repeat(' ', self::HELP_START_TEXT - 1 - mb_strlen($str_arg, 'UTF-8'));
+            $help = $help->wrap(self::getWidth() - self::HELP_START_TEXT - 1);
+
+            if(mb_strlen($str_arg, 'UTF-8') < self::HELP_START_TEXT - 1)
+            {
+                $str_arg = $str_arg . str_repeat(' ', self::HELP_START_TEXT - 1 - mb_strlen($str_arg, 'UTF-8'));
+                return $str_arg . $help->margin(self::HELP_START_TEXT - 1, 0, -(self::HELP_START_TEXT - 1));
+            }
+            else
+            {
+                $str_arg = $str_arg . "\n";
+                return $str_arg . $help->margin(self::HELP_START_TEXT - 1);
+            }
         }
         else
         {
-            $str_arg = $str_arg . "\n" . str_repeat(' ', self::HELP_START_TEXT - 1);
+            $str_arg = $str_arg . "\n";
+            return $str_arg . $help->wrap(self::getWidth());
         }
-
-        if($this->str_help)
-        {
-            $arr_lines = array();
-
-            if(strlen($this->str_help) === mb_strlen($this->str_help, 'UTF-8'))
-            {
-                $arr_lines = explode("\n", wordwrap($this->str_help, self::getWidth() - self::HELP_START_TEXT - 1, "\n"));
-            }
-            else
-            {
-                //Thanks to: http://www.php.net/manual/fr/function.wordwrap.php#104811
-                $str_prov = $this->str_help;
-                $int_length = mb_strlen($str_prov, 'UTF-8');
-                $int_width = self::getWidth() - self::HELP_START_TEXT - 1;
-
-                if ($int_length <= $int_width)
-                {
-                    return $str_prov;
-                }
-
-                $int_last_space = 0;
-                $i = 0;
-
-                do
-                {
-                    if (mb_substr($str_prov, $i, 1, 'UTF-8') == ' ')
-                    {
-                        $int_last_space = $i;
-                    }
-
-                    if ($i > $int_width)
-                    {
-                        if($int_last_space == 0)
-                        {
-                            $int_last_space = $int_width;
-                        }
-
-                        $arr_lines[] = trim(
-                            mb_substr(
-                                $str_prov,
-                                0,
-                                $int_last_space,
-                                'UTF-8')
-                            );
-
-                        $str_prov = mb_substr(
-                            $str_prov,
-                            $int_last_space,
-                            $int_length,
-                            'UTF-8'
-                        );
-
-                        $int_length = mb_strlen($str_prov, 'UTF-8');
-                        
-                        $i = 0;
-                    }
-
-                    $i++;
-                }
-                while ($i < $int_length);
-
-                $arr_lines[] = trim($str_prov);
-            }
-        }
-
-
-        $arr_out = array();
-
-        foreach($arr_lines as $k => $v)
-        {
-            if($k == 0)
-            {
-                $arr_out[] = $str_arg . $v;
-            }
-            else
-            {
-                $arr_out[] = str_repeat(' ', self::HELP_START_TEXT - 1) . $v;
-            }
-        }
-
-        return implode("\n", $arr_out);
     }
 }
