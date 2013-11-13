@@ -25,6 +25,7 @@
 
 namespace Malenki\Argile;
 
+
 class Options
 {
     protected static $obj_instance = null;
@@ -268,79 +269,8 @@ class Options
     {
         if(is_string($this->str_description))
         {
-            // TODO
-            // this code is very closed to other in Arg. I must output that 
-            // into other project, like Bah for example to deal with string.
-            $arr_lines = array();
-
-            if(strlen($this->str_description) === mb_strlen($this->str_description, 'UTF-8'))
-            {
-                $arr_lines = explode(
-                    "\n",
-                    wordwrap(
-                        $this->str_description, 
-                        Arg::getWidth(), 
-                        "\n"
-                    )
-                );
-            }
-            else
-            {
-                //Thanks to: http://www.php.net/manual/fr/function.wordwrap.php#104811
-                $str_prov = $this->str_description;
-                $int_length = mb_strlen($str_prov, 'UTF-8');
-                $int_width = Arg::getWidth();
-
-                if ($int_length <= $int_width)
-                {
-                    return $str_prov;
-                }
-
-                $int_last_space = 0;
-                $i = 0;
-
-                do
-                {
-                    if (mb_substr($str_prov, $i, 1, 'UTF-8') == ' ')
-                    {
-                        $int_last_space = $i;
-                    }
-
-                    if ($i > $int_width)
-                    {
-                        if($int_last_space == 0)
-                        {
-                            $int_last_space = $int_width;
-                        }
-
-                        $arr_lines[] = trim(
-                            mb_substr(
-                                $str_prov,
-                                0,
-                                $int_last_space,
-                                'UTF-8')
-                            );
-
-                        $str_prov = mb_substr(
-                            $str_prov,
-                            $int_last_space,
-                            $int_length,
-                            'UTF-8'
-                        );
-
-                        $int_length = mb_strlen($str_prov, 'UTF-8');
-
-                        $i = 0;
-                    }
-
-                    $i++;
-                }
-                while ($i < $int_length);
-
-                $arr_lines[] = trim($str_prov);
-            }
-            return implode("\n", $arr_lines);
-
+            $description = new \Malenki\Bah\S($this->str_description);
+            return $description->wrap(Arg::getWidth());
         }
         else
         {

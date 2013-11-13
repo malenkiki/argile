@@ -1,12 +1,10 @@
+#!/usr/bin/env php
 <?php
-include(preg_replace('@/@', DIRECTORY_SEPARATOR, '../src/Malenki/Argile/Arg.php'));
-include(preg_replace('@/@', DIRECTORY_SEPARATOR, '../src/Malenki/Argile/Options.php'));
 
-use Malenki\Argile\Arg as Arg;
-use Malenki\Argile\Options as Options;
+(@include_once __DIR__ . '/../vendor/autoload.php') || @include_once __DIR__ . '/../../../autoload.php';
 
 
-$opt = Options::getInstance();
+$opt = Malenki\Argile\Options::getInstance();
 
 $opt->flexible();
 

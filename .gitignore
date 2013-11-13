@@ -1,0 +1,4 @@
+Makefile
+*.swp
+vendor/
+composer.lock
