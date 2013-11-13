@@ -25,15 +25,6 @@
 
 namespace Malenki\Argile;
 
-$arr_inc = include_once(realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..').DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'composer'.DIRECTORY_SEPARATOR.'include_paths.php');
-
-foreach($arr_inc as $file)
-{
-    include($file);
-}
-include_once(__DIR__.DIRECTORY_SEPARATOR. 'Arg.php');
-
-
 
 class Options
 {

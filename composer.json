@@ -20,12 +20,5 @@
         "psr-0": {
             "Malenki\\Argile": "src/"
         }
-    },
-    "include-path": [
-        "vendor/malenki/bah/src/Malenki/Bah/O.php",
-        "vendor/malenki/bah/src/Malenki/Bah/N.php",
-        "vendor/malenki/bah/src/Malenki/Bah/A.php",
-        "vendor/malenki/bah/src/Malenki/Bah/S.php",
-        "vendor/malenki/bah/src/Malenki/Bah/C.php"
-    ]
+    }
 }
