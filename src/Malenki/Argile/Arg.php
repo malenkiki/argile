@@ -436,13 +436,13 @@ class Arg
             }
             else
             {
-                $str_arg = $str_arg . "\n";
+                $str_arg = $str_arg . PHP_EOL;
                 return $str_arg . $help->margin(self::HELP_START_TEXT - 1);
             }
         }
         else
         {
-            $str_arg = $str_arg . "\n";
+            $str_arg = $str_arg . PHP_EOL;
             return $str_arg . $help->wrap(self::getWidth());
         }
     }

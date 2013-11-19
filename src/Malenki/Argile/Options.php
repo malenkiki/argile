@@ -37,7 +37,7 @@ class Options
     protected $arr_switch = array();
     protected $arr_values = array();
 
-    protected $str_usage = null;
+    protected $arr_usage = array();
     protected $str_description = null;
     protected $str_version = null;
 
@@ -116,9 +116,9 @@ class Options
     }
 
 
-    public function usage($str)
+    public function addUsage($str)
     {
-        $this->str_usage = $str;
+        $this->arr_usage[] = $str;
     }
 
     public function description($str)
@@ -248,16 +248,24 @@ class Options
      */
     public function getUsage()
     {
-        global $argv;
-        $str_usage = "[OPTIONS]…";
+        $str_prog = basename($_SERVER['argv'][0]);
 
-        if(is_string($this->str_usage))
+        $first = new \Malenki\Bah\S(sprintf('Usage: %s %s', $str_prog, "[OPTIONS]…"));
+
+        $arr_out = array(
+            $first->wrap(Arg::getWidth() - 7)->margin(7, 0, -7)
+        );
+
+        foreach($this->arr_usage as $item)
         {
-            $str_usage = $this->str_usage;
+            $item = new \Malenki\Bah\S($str_prog.' '.$item);
+            $arr_out[] = $item->wrap(Arg::getWidth() - 7)->margin(7);
         }
 
-        return sprintf('Usage: %s %s', basename($argv[0]), $str_usage);
+        return implode(PHP_EOL, $arr_out);
     }
+
+
 
     /**
      * Retourne la description du programme 
@@ -334,7 +342,8 @@ class Options
     {
         if($this->has('version') && $this->hasVersion())
         {
-            printf("%s\n", $this->str_version);
+            $version = new \Malenki\Bah\S($this->str_version);
+            printf($version->wrap(Arg::getWidth()) . PHP_EOL);
         }
     }
 

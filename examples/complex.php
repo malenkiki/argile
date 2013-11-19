@@ -8,7 +8,8 @@ $opt = Malenki\Argile\Options::getInstance();
 
 $opt->flexible();
 
-$opt->usage('Explain in short some CLI usage.');
+$opt->addUsage('-f FOO');
+$opt->addUsage('-s [-b BAR]');
 $opt->description('Blahblah about your software. this can have any size, on several lines or can be short, some words. But it is good to have some idea about what your script does, so, do not be shy and explain what this fantastic software does!');
 $opt->version('Some App Version 1.0');
 
@@ -23,7 +24,7 @@ $opt->newSwitch('switch', 'one')
 $opt->newSwitch('switch2', 'one')
     ->short('n')
     ->long('i-am-very-long-option-baby')
-    ->help('I am a very simple switch arg with only short form.')
+    ->help('I am a very simple switch arg with only short form but my long form is very, very, very long.')
     ;
 $opt->newValue('foo', 'two')
     ->required()
