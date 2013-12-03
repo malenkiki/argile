@@ -22,8 +22,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-include_once('src/Malenki/Argile/Arg.php');
-
+(@include_once __DIR__ . '/../vendor/autoload.php') || @include_once __DIR__ . '/../../../autoload.php';
 class ArgTest extends PHPUnit_Framework_TestCase
 {
     public function testSwitchInit()
