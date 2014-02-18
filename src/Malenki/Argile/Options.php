@@ -33,6 +33,7 @@ class Options
     protected static $arr_group = array();
     protected static $arr_prohibited = array('h', 'help', 'version');
     protected $arr_parsed = array();
+    protected $arr_argument = array();
     
     protected $arr_switch = array();
     protected $arr_values = array();
@@ -93,6 +94,54 @@ class Options
             $this->getShort(),
             $this->getLong()
         );
+
+
+        $arr_argv = $_SERVER['argv'];
+        array_shift($arr_argv);
+
+        foreach($arr_argv as $k => $v)
+        {
+            if(preg_match('/^-{1,2}/', $v))
+            {
+                $opt_name = preg_replace('/^[-]+/', '', $v);
+
+                if(array_key_exists($opt_name, $this->arr_parsed))
+                {
+                    if(is_bool($this->arr_parsed[$opt_name]))
+                    {
+                        unset($arr_argv[$k]);
+                    }
+                    else
+                    {
+                        unset($arr_argv[$k]);
+                        unset($arr_argv[$k + 1]);
+                    }
+                }
+            }
+        }
+
+        $this->arr_argument = array_values($arr_argv);
+
+
+        // Checks invalid options
+        $invalid_opt = null;
+
+        foreach($arr_argv as $v)
+        {
+            if(preg_match('/^-{1,2}/', $v))
+            {
+                $invalid_opt = $v;
+                break;
+            }
+        }
+
+        if(!is_null($invalid_opt))
+        {
+            fwrite(STDERR, sprintf('The given "%s" option is not valid!', $invalid_opt));
+            fwrite(STDERR, "\n");
+            exit(1);
+        }
+
 
 
         $this->displayVersion();
@@ -368,6 +417,23 @@ class Options
             )
         );
     }
+
+
+
+    public function hasArgument()
+    {
+        return (boolean) count($this->arr_argument);
+    }
+
+
+    public function getArguments()
+    {
+        return $this->arr_argument;
+    }
+
+
+
+
 
     /**
      * getArg 
