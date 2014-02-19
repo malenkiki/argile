@@ -103,6 +103,10 @@ class Options
         {
             if(preg_match('/^-{1,2}/', $v))
             {
+                $bool_equal = (boolean) preg_match('/^[a-zA-Z0-9-]+=/', $v);
+
+                $v = preg_replace('/(^[a-zA-Z0-9-]+)=.*/', '\1', $v);
+                
                 $opt_name = preg_replace('/^[-]+/', '', $v);
 
                 if(array_key_exists($opt_name, $this->arr_parsed))
@@ -114,7 +118,11 @@ class Options
                     else
                     {
                         unset($arr_argv[$k]);
-                        unset($arr_argv[$k + 1]);
+
+                        if(!$bool_equal)
+                        {
+                            unset($arr_argv[$k + 1]);
+                        }
                     }
                 }
             }
