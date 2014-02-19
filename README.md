@@ -81,9 +81,23 @@ exit();
 
 ## Advanced usage of values and switches
 
-You can customize variable name into help text of each option.
+You can customize variable name into help text of each option:
 
-TODO: example
+```php
+use Malenki\Argile\Options as Options;
+
+$opt = Options::getInstance();
+
+$opt->newValue('foo')
+    ->required()
+    ->short('f')
+    ->long('foo')
+    ->help('I am a simple required value with short and long forms.', 'FILE')
+    ;
+
+//...
+
+```
 
 You can group options together. Easy, you have to create group, and when you create options, you put the group name hassecond argument:
 
@@ -120,13 +134,13 @@ Later, if you can help, options will be grouped and group's name is shown if it 
 
 ## Detect and get arguments
 
-TODO
+Detecting and getting arguments is simple, just use `hasArgument()` and `getArguments()` methods respectively. The second one returns an array.
 
 ## Meta information about CLI app
 
 You can define some informations about your app that will be used into help message:
 
- - Synopsis
+ - Synopsis (you can add several synopsis lines, see example files)
  - Version
  - Description
  
@@ -144,3 +158,5 @@ $opt->flexible(); // yes, that's all
 
 // and add your options and other thing…
 ```
+
+To see Argile in action, please look at `examples` directory and run scripts inside it!
