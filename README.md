@@ -29,7 +29,7 @@ So, if your PHP CLI application is into `yourapp` executable file, then you can 
 
 ```
 $ yourapp -s
-"switch\" arg selected!
+"switch" arg selected!
 ```
 
 Without options, calling it will give help message:
