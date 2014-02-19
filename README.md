@@ -46,7 +46,7 @@ Usage: complex.php [OPTIONS]…
 
 ```
 
-Second example this switch, values, short, long and required option:
+Second example with switch, values, short, long and required options:
 
 ```php
 use Malenki\Argile\Options as Options;
@@ -99,7 +99,7 @@ $opt->newValue('foo')
 
 ```
 
-You can group options together. Easy, you have to create group, and when you create options, you put the group name hassecond argument:
+You can group options together. Easy, you have to create group, and when you create options, you put the group name has second argument:
 
 ```php
 use Malenki\Argile\Options as Options;
