@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "malenki/bah": ">=0.9.1"
+        "malenki/bah": ">=0.9.1",
         "malenki/ansi": ">=1.2.3"
     },
     "autoload": {
