@@ -24,7 +24,7 @@
 
 
 namespace Malenki\Argile;
-
+use \Malenki\Ansi;
 
 class Options
 {
@@ -34,6 +34,7 @@ class Options
     protected static $arr_prohibited = array('h', 'help', 'version');
     protected $arr_parsed = array();
     protected $arr_argument = array();
+    protected $obj_color = null;
     
     protected $arr_switch = array();
     protected $arr_values = array();
@@ -53,9 +54,32 @@ class Options
         return self::$obj_instance;
     }
 
+    private function __construct()
+    {
+        $this->obj_color = new \stdClass();
+        $this->obj_color->label = null;
+        $this->obj_color->opt = null;
+        $this->obj_color->bold = false;
+    }
+
     public function flexible()
     {
         Arg::flexible();
+    }
+
+    public function labelColor($str_color)
+    {
+        $this->obj_color->label = $str_color;
+    }
+
+    public function optColor($str_color)
+    {
+        $this->obj_color->opt = $str_color;
+    }
+
+    public function bold()
+    {
+        $this->obj_color->bold = true;
     }
 
     /**
@@ -81,6 +105,7 @@ class Options
             ->help('Display this help message and exit')
         ;
 
+
         if($this->hasVersion())
         {
             self::$arr_group['helpversion']->args['version'] = Arg::createSwitch('version')
@@ -89,6 +114,17 @@ class Options
                 ;
         }
         
+        if($this->obj_color->opt)
+        {
+            self::$arr_group['helpversion']->args['help']->color($this->obj_color->opt);
+            self::$arr_group['helpversion']->args['version']->color($this->obj_color->opt);
+        }
+        
+        if($this->obj_color->bold)
+        {
+            self::$arr_group['helpversion']->args['help']->bold();
+            self::$arr_group['helpversion']->args['version']->bold();
+        }
         
         $this->arr_parsed = getopt(
             $this->getShort(),
@@ -284,7 +320,19 @@ class Options
 
     public function newSwitch($name, $group = null)
     {
-        self::add(Arg::createSwitch($name), $group);
+        $arg = Arg::createSwitch($name);
+        
+        if($this->obj_color->opt)
+        {
+            $arg->color($this->obj_color->opt);
+        }
+
+        if($this->obj_color->bold)
+        {
+            $arg->bold();
+        }
+
+        self::add($arg, $group);
         return self::getArg($name);
     } 
 
@@ -292,7 +340,19 @@ class Options
 
     public function newValue($name, $group = null)
     {
-        self::add(Arg::createValue($name), $group);
+        $arg = Arg::createValue($name);
+        
+        if($this->obj_color->opt)
+        {
+            $arg->color($this->obj_color->opt);
+        }
+
+        if($this->obj_color->bold)
+        {
+            $arg->bold();
+        }
+
+        self::add($arg, $group);
         return self::getArg($name);
     } 
 
@@ -307,7 +367,24 @@ class Options
     {
         $str_prog = basename($_SERVER['argv'][0]);
 
-        $first = new \Malenki\Bah\S(sprintf('Usage: %s %s', $str_prog, "[OPTIONS]…"));
+        $label_usage = 'Usage:';
+        
+        if($this->obj_color->label || $this->obj_color->bold)
+        {
+            $label_usage = new Ansi($label_usage);
+
+            if($this->obj_color->label)
+            {
+                $label_usage->fg($this->obj_color->label);
+            }
+            
+            if($this->obj_color->bold)
+            {
+                $label_usage->bold;
+            }
+        }
+
+        $first = new \Malenki\Bah\S(sprintf('%s %s %s', $label_usage, $str_prog, "[OPTIONS]…"));
 
         $arr_out = array(
             $first->wrap(Arg::getWidth() - 7)->margin(7, 0, -7)
@@ -369,7 +446,24 @@ class Options
 
                     if($group->name)
                     {
-                        printf("%s\n", $group->name);
+                        $name = $group->name;
+
+                        if($this->obj_color->label || $this->obj_color->bold)
+                        {
+                            $name = new Ansi($name);
+
+                            if($this->obj_color->label)
+                            {
+                                $name->fg($this->obj_color->label);
+                            }
+
+                            if($this->obj_color->bold)
+                            {
+                                $name->bold;
+                            }
+                        }
+
+                        printf("%s\n", $name);
                     }
                     foreach($group->args as $arg)
                     {
