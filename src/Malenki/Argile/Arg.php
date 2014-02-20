@@ -24,6 +24,8 @@
 
 namespace Malenki\Argile;
 
+use \Malenki\Ansi;
+
 /**
  * Arg 
  * 
@@ -75,6 +77,8 @@ class Arg
     protected $str_help = null;
     protected $str_name = null;
     protected $str_var_help = self::VAR_HELP_DEFAULT;
+    protected $str_color = null;
+    protected $bool_bold = false;
 
     protected $int_type = self::ARG_SWITCH;
     protected $mixed_value = null;
@@ -97,6 +101,19 @@ class Arg
     }
 
 
+    public function color($str_color)
+    {
+        $this->str_color = $str_color;
+        return $this;
+    }
+
+    public function bold()
+    {
+        $this->bool_bold = true;
+        return $this;
+    }
+
+
 
     /**
      * @return boolean
@@ -111,6 +128,7 @@ class Arg
     public function setValue($value)
     {
         $this->mixed_value = value;
+        return $this;
     }
 
 
@@ -422,16 +440,39 @@ class Arg
             $str_arg = sprintf('  -%s', self::removeColon($this->str_short) . $str_var_help);
         }
 
+        $int_arg_length = mb_strlen($str_arg, 'UTF-8');
+
+        if($this->str_color || $this->bool_bold)
+        {
+            $arg = new Ansi($str_arg);
+            
+            if($this->str_color)
+            {
+                $arg->fg($this->str_color);
+            }
+            
+            if($this->bool_bold)
+            {
+                $arg->bold;
+            }
+        }
+        
+        if(isset($arg))
+        {
+            $str_arg = $arg;
+        }
+
         $help = new \Malenki\Bah\S($this->str_help);
         
 
         if(self::getWidth() > (self::HELP_START_TEXT * 2))
         {
             $help = $help->wrap(self::getWidth() - self::HELP_START_TEXT - 1);
+            
 
-            if(mb_strlen($str_arg, 'UTF-8') < self::HELP_START_TEXT - 1)
+            if($int_arg_length < self::HELP_START_TEXT - 1)
             {
-                $str_arg = $str_arg . str_repeat(' ', self::HELP_START_TEXT - 1 - mb_strlen($str_arg, 'UTF-8'));
+                $str_arg = $str_arg . str_repeat(' ', self::HELP_START_TEXT - 1 - $int_arg_length);
                 return $str_arg . $help->margin(self::HELP_START_TEXT - 1, 0, -(self::HELP_START_TEXT - 1));
             }
             else
