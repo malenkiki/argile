@@ -7,7 +7,9 @@
 $opt = Malenki\Argile\Options::getInstance();
 
 $opt->flexible();
-
+$opt->labelColor('cyan');
+$opt->optColor('yellow');
+//$opt->bold();
 $opt->addUsage('-f FOO');
 $opt->addUsage('-s [-b BAR]');
 $opt->description('Blahblah about your software. this can have any size, on several lines or can be short, some words. But it is good to have some idea about what your script does, so, do not be shy and explain what this fantastic software does!');
