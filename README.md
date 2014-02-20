@@ -81,7 +81,7 @@ exit();
 
 ## Advanced usage of values and switches
 
-You can customize variable name into help text of each option:
+You can **customize variable name** into help text of each option:
 
 ```php
 use Malenki\Argile\Options as Options;
@@ -99,7 +99,7 @@ $opt->newValue('foo')
 
 ```
 
-You can group options together. Easy, you have to create group, and when you create options, you put the group name has second argument:
+You can **group options together**. Easy, you have to create group, and when you create options, you put the group name has second argument:
 
 ```php
 use Malenki\Argile\Options as Options;
@@ -146,7 +146,7 @@ You can define some informations about your app that will be used into help mess
  
 ## More
 
-You can have "flexible" help output message, that fit your terminal width, or you can leave at default with of 80 columns.
+You can have "flexible" help output message, that **fit your terminal width**, or you can leave at default with of 80 columns.
 
 If you want this text adjustment, do just following:
 
@@ -158,5 +158,20 @@ $opt->flexible(); // yes, that's all
 
 // and add your options and other thing…
 ```
+
+You can apply **color** and **bold** on labels and options:
+
+```php
+use Malenki\Argile\Options as Options;
+
+$opt = Options::getInstance();
+$opt->labelColor('red'); // color for labels
+$opt->optColor('red'); // color for options
+$opt->bold(); // labels and options becomes bold
+
+// and add your options and other thing…
+```
+
+Colors’ names are the same as foreground colors defined into [Ansi](https://github.com/malenkiki/ansi) project.
 
 To see Argile in action, please look at `examples` directory and run scripts inside it!
