@@ -64,7 +64,7 @@ class Options
 
     public function flexible()
     {
-        Arg::flexible();
+        OptionItem::flexible();
     }
 
     public function labelColor($str_color)
@@ -99,7 +99,7 @@ class Options
         self::addGroup('helpversion');
 
         // On ajoute les options spéciales Help et Version
-        self::$arr_group['helpversion']->args['help'] = Arg::createSwitch('help')
+        self::$arr_group['helpversion']->args['help'] = OptionItem::createSwitch('help')
             ->short('h')
             ->long('help')
             ->help('Display this help message and exit')
@@ -108,7 +108,7 @@ class Options
 
         if($this->hasVersion())
         {
-            self::$arr_group['helpversion']->args['version'] = Arg::createSwitch('version')
+            self::$arr_group['helpversion']->args['version'] = OptionItem::createSwitch('version')
                 ->long('version')
                 ->help('Display version information and exit')
                 ;
@@ -240,28 +240,28 @@ class Options
     /**
      * add 
      * 
-     * @param Arg $arg 
+     * @param OptionItem $opt 
      * @param mixed $str_alias 
      * @static
      * @access public
      * @return void
      */
-    public static function add(Arg $arg, $str_alias = null)
+    public static function add(OptionItem $opt, $str_alias = null)
     {
         // tester ici si version ou aide : à ne pas mettre
         if(
-            !in_array($arg->getShort(true), self::$arr_prohibited, true)
+            !in_array($opt->getShort(true), self::$arr_prohibited, true)
             &&
-            !in_array($arg->getLong(true), self::$arr_prohibited, true)
+            !in_array($opt->getLong(true), self::$arr_prohibited, true)
         )
         {
             if(is_string($str_alias) && isset(self::$arr_group[$str_alias]))
             {
-                self::$arr_group[$str_alias]->args[$arg->getName()] = $arg;
+                self::$arr_group[$str_alias]->args[$opt->getName()] = $opt;
             }
             else
             {
-                self::$arr_arg[$arg->getName()] = $arg;
+                self::$arr_arg[$opt->getName()] = $opt;
             }
         }
     }
@@ -320,7 +320,7 @@ class Options
 
     public function newSwitch($name, $group = null)
     {
-        $arg = Arg::createSwitch($name);
+        $arg = OptionItem::createSwitch($name);
         
         if($this->obj_color->opt)
         {
@@ -340,7 +340,7 @@ class Options
 
     public function newValue($name, $group = null)
     {
-        $arg = Arg::createValue($name);
+        $arg = OptionItem::createValue($name);
         
         if($this->obj_color->opt)
         {
@@ -387,13 +387,13 @@ class Options
         $first = new \Malenki\Bah\S(sprintf('%s %s %s', $label_usage, $str_prog, "[OPTIONS]…"));
 
         $arr_out = array(
-            $first->wrap(Arg::getWidth() - 7)->margin(7, 0, -7)
+            $first->wrap(OptionItem::getWidth() - 7)->margin(7, 0, -7)
         );
 
         foreach($this->arr_usage as $item)
         {
             $item = new \Malenki\Bah\S($str_prog.' '.$item);
-            $arr_out[] = $item->wrap(Arg::getWidth() - 7)->margin(7);
+            $arr_out[] = $item->wrap(OptionItem::getWidth() - 7)->margin(7);
         }
 
         return implode(PHP_EOL, $arr_out);
@@ -412,7 +412,7 @@ class Options
         if(is_string($this->str_description))
         {
             $description = new \Malenki\Bah\S($this->str_description);
-            return $description->wrap(Arg::getWidth());
+            return $description->wrap(OptionItem::getWidth());
         }
         else
         {
@@ -494,7 +494,7 @@ class Options
         if($this->has('version') && $this->hasVersion())
         {
             $version = new \Malenki\Bah\S($this->str_version);
-            printf($version->wrap(Arg::getWidth()) . PHP_EOL);
+            printf($version->wrap(OptionItem::getWidth()) . PHP_EOL);
         }
     }
 

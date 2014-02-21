@@ -31,7 +31,7 @@ use \Malenki\Ansi;
  * 
  * @author Michel Petit <petit.michel@gmail.com> 
  */
-class Arg 
+class OptionItem 
 {
     const ARG_SWITCH = 0;
     const ARG_VALUE = 1;
@@ -135,7 +135,7 @@ class Arg
 
     /**
      * @param string $name
-     * @return Arg
+     * @return OptionItem
      */
     public static function createSwitch($name)
     {
@@ -146,7 +146,7 @@ class Arg
 
     /**
      * @param string $name
-     * @return Arg
+     * @return OptionItem
      */
     public static function createValue($name)
     {
@@ -250,7 +250,7 @@ class Arg
 
     /**
      * @param string $str
-     * @return Arg L’objet lui-même est retourné pour chaîner…
+     * @return OptionItem L’objet lui-même est retourné pour chaîner…
      */
     public function short($str)
     {
@@ -263,7 +263,7 @@ class Arg
 
     /**
      * @param string $str
-     * @return Arg L’objet lui-même est retourné pour chaîner…
+     * @return OptionItem L’objet lui-même est retourné pour chaîner…
      */
     public function long($str)
     {
@@ -276,7 +276,7 @@ class Arg
 
     /**
      * @param string $str
-     * @return Arg L’objet lui-même est retourné pour chaîner…
+     * @return OptionItem L’objet lui-même est retourné pour chaîner…
      */
     public function help($str, $str_var = null)
     {
