@@ -29,7 +29,7 @@ use \Malenki\Ansi;
 class Options
 {
     protected static $obj_instance = null;
-    protected static $arr_arg = array();
+    protected static $arr_opt = array();
     protected static $arr_group = array();
     protected static $arr_prohibited = array('h', 'help', 'version');
     protected $arr_parsed = array();
@@ -261,7 +261,7 @@ class Options
             }
             else
             {
-                self::$arr_arg[$opt->getName()] = $opt;
+                self::$arr_opt[$opt->getName()] = $opt;
             }
         }
     }
@@ -271,7 +271,7 @@ class Options
     {
         $str_out = '';
 
-        foreach(self::$arr_arg as $arg)
+        foreach(self::$arr_opt as $arg)
         {
             if($arg->hasShort())
             {
@@ -297,7 +297,7 @@ class Options
     {
         $arr_out = array();
 
-        foreach(self::$arr_arg as $arg)
+        foreach(self::$arr_opt as $arg)
         {
             if($arg->hasLong())
             {
@@ -333,7 +333,7 @@ class Options
         }
 
         self::add($arg, $group);
-        return self::getArg($name);
+        return self::getOpt($name);
     } 
 
 
@@ -353,7 +353,7 @@ class Options
         }
 
         self::add($arg, $group);
-        return self::getArg($name);
+        return self::getOpt($name);
     } 
 
 
@@ -427,9 +427,9 @@ class Options
         
 
         // Les options non incluses dans un groupe
-        if(count(self::$arr_arg))
+        if(count(self::$arr_opt))
         {
-            foreach(self::$arr_arg as $arg)
+            foreach(self::$arr_opt as $arg)
             {
                 printf("%s\n", rtrim($arg));
             }
@@ -508,7 +508,7 @@ class Options
      */
     public function has($str)
     {
-        $arg = self::getArg($str);
+        $arg = self::getOpt($str);
         return
             is_object($arg)
             &&
@@ -538,20 +538,18 @@ class Options
 
 
     /**
-     * getArg 
-     * 
      * @param mixed $str 
      * @static
      * @access public
      * @return void
      */
-    public static function getArg($str)
+    public static function getOpt($str)
     {
         $arg = false;
 
-        if(isset(self::$arr_arg[$str]))
+        if(isset(self::$arr_opt[$str]))
         {
-            $arg = self::$arr_arg[$str];
+            $arg = self::$arr_opt[$str];
         }
         else
         {
@@ -574,7 +572,7 @@ class Options
      */
     public function get($str)
     {
-        $arg = self::getArg($str);
+        $arg = self::getOpt($str);
 
         if(isset($this->arr_parsed[$arg->getLong()]))
         {
