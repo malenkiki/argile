@@ -25,6 +25,7 @@
 namespace Malenki\Argile;
 
 use \Malenki\Ansi;
+use \Malenki\Bah\S;
 
 /**
  * Arg 
@@ -462,7 +463,7 @@ class OptionItem
             $str_arg = $arg;
         }
 
-        $help = new \Malenki\Bah\S($this->str_help);
+        $help = new S($this->str_help);
         
 
         if(self::getWidth() > (self::HELP_START_TEXT * 2))

@@ -25,6 +25,7 @@
 
 namespace Malenki\Argile;
 use \Malenki\Ansi;
+use \Malenki\Bah\S;
 
 class Options
 {
@@ -384,7 +385,7 @@ class Options
             }
         }
 
-        $first = new \Malenki\Bah\S(sprintf('%s %s %s', $label_usage, $str_prog, "[OPTIONS]…"));
+        $first = new S(sprintf('%s %s %s', $label_usage, $str_prog, "[OPTIONS]…"));
 
         $arr_out = array(
             $first->wrap(OptionItem::getWidth() - 7)->margin(7, 0, -7)
@@ -392,7 +393,7 @@ class Options
 
         foreach($this->arr_usage as $item)
         {
-            $item = new \Malenki\Bah\S($str_prog.' '.$item);
+            $item = new S($str_prog.' '.$item);
             $arr_out[] = $item->wrap(OptionItem::getWidth() - 7)->margin(7);
         }
 
@@ -411,7 +412,7 @@ class Options
     {
         if(is_string($this->str_description))
         {
-            $description = new \Malenki\Bah\S($this->str_description);
+            $description = new S($this->str_description);
             return $description->wrap(OptionItem::getWidth());
         }
         else
@@ -493,7 +494,7 @@ class Options
     {
         if($this->has('version') && $this->hasVersion())
         {
-            $version = new \Malenki\Bah\S($this->str_version);
+            $version = new S($this->str_version);
             printf($version->wrap(OptionItem::getWidth()) . PHP_EOL);
         }
     }
