@@ -25,11 +25,12 @@
 
 namespace Malenki\Argile;
 use \Malenki\Ansi;
+use \Malenki\Bah\S;
 
 class Options
 {
     protected static $obj_instance = null;
-    protected static $arr_arg = array();
+    protected static $arr_opt = array();
     protected static $arr_group = array();
     protected static $arr_prohibited = array('h', 'help', 'version');
     protected $arr_parsed = array();
@@ -64,7 +65,7 @@ class Options
 
     public function flexible()
     {
-        Arg::flexible();
+        OptionItem::flexible();
     }
 
     public function labelColor($str_color)
@@ -99,7 +100,7 @@ class Options
         self::addGroup('helpversion');
 
         // On ajoute les options spéciales Help et Version
-        self::$arr_group['helpversion']->args['help'] = Arg::createSwitch('help')
+        self::$arr_group['helpversion']->args['help'] = OptionItem::createSwitch('help')
             ->short('h')
             ->long('help')
             ->help('Display this help message and exit')
@@ -108,7 +109,7 @@ class Options
 
         if($this->hasVersion())
         {
-            self::$arr_group['helpversion']->args['version'] = Arg::createSwitch('version')
+            self::$arr_group['helpversion']->args['version'] = OptionItem::createSwitch('version')
                 ->long('version')
                 ->help('Display version information and exit')
                 ;
@@ -240,28 +241,28 @@ class Options
     /**
      * add 
      * 
-     * @param Arg $arg 
+     * @param OptionItem $opt 
      * @param mixed $str_alias 
      * @static
      * @access public
      * @return void
      */
-    public static function add(Arg $arg, $str_alias = null)
+    public static function add(OptionItem $opt, $str_alias = null)
     {
         // tester ici si version ou aide : à ne pas mettre
         if(
-            !in_array($arg->getShort(true), self::$arr_prohibited, true)
+            !in_array($opt->getShort(true), self::$arr_prohibited, true)
             &&
-            !in_array($arg->getLong(true), self::$arr_prohibited, true)
+            !in_array($opt->getLong(true), self::$arr_prohibited, true)
         )
         {
             if(is_string($str_alias) && isset(self::$arr_group[$str_alias]))
             {
-                self::$arr_group[$str_alias]->args[$arg->getName()] = $arg;
+                self::$arr_group[$str_alias]->args[$opt->getName()] = $opt;
             }
             else
             {
-                self::$arr_arg[$arg->getName()] = $arg;
+                self::$arr_opt[$opt->getName()] = $opt;
             }
         }
     }
@@ -271,7 +272,7 @@ class Options
     {
         $str_out = '';
 
-        foreach(self::$arr_arg as $arg)
+        foreach(self::$arr_opt as $arg)
         {
             if($arg->hasShort())
             {
@@ -297,7 +298,7 @@ class Options
     {
         $arr_out = array();
 
-        foreach(self::$arr_arg as $arg)
+        foreach(self::$arr_opt as $arg)
         {
             if($arg->hasLong())
             {
@@ -320,7 +321,7 @@ class Options
 
     public function newSwitch($name, $group = null)
     {
-        $arg = Arg::createSwitch($name);
+        $arg = OptionItem::createSwitch($name);
         
         if($this->obj_color->opt)
         {
@@ -333,14 +334,14 @@ class Options
         }
 
         self::add($arg, $group);
-        return self::getArg($name);
+        return self::getOpt($name);
     } 
 
 
 
     public function newValue($name, $group = null)
     {
-        $arg = Arg::createValue($name);
+        $arg = OptionItem::createValue($name);
         
         if($this->obj_color->opt)
         {
@@ -353,7 +354,7 @@ class Options
         }
 
         self::add($arg, $group);
-        return self::getArg($name);
+        return self::getOpt($name);
     } 
 
 
@@ -384,16 +385,16 @@ class Options
             }
         }
 
-        $first = new \Malenki\Bah\S(sprintf('%s %s %s', $label_usage, $str_prog, "[OPTIONS]…"));
+        $first = new S(sprintf('%s %s %s', $label_usage, $str_prog, "[OPTIONS]…"));
 
         $arr_out = array(
-            $first->wrap(Arg::getWidth() - 7)->margin(7, 0, -7)
+            $first->wrap(OptionItem::getWidth() - 7)->margin(7, 0, -7)
         );
 
         foreach($this->arr_usage as $item)
         {
-            $item = new \Malenki\Bah\S($str_prog.' '.$item);
-            $arr_out[] = $item->wrap(Arg::getWidth() - 7)->margin(7);
+            $item = new S($str_prog.' '.$item);
+            $arr_out[] = $item->wrap(OptionItem::getWidth() - 7)->margin(7);
         }
 
         return implode(PHP_EOL, $arr_out);
@@ -411,8 +412,8 @@ class Options
     {
         if(is_string($this->str_description))
         {
-            $description = new \Malenki\Bah\S($this->str_description);
-            return $description->wrap(Arg::getWidth());
+            $description = new S($this->str_description);
+            return $description->wrap(OptionItem::getWidth());
         }
         else
         {
@@ -427,9 +428,9 @@ class Options
         
 
         // Les options non incluses dans un groupe
-        if(count(self::$arr_arg))
+        if(count(self::$arr_opt))
         {
-            foreach(self::$arr_arg as $arg)
+            foreach(self::$arr_opt as $arg)
             {
                 printf("%s\n", rtrim($arg));
             }
@@ -493,8 +494,8 @@ class Options
     {
         if($this->has('version') && $this->hasVersion())
         {
-            $version = new \Malenki\Bah\S($this->str_version);
-            printf($version->wrap(Arg::getWidth()) . PHP_EOL);
+            $version = new S($this->str_version);
+            printf($version->wrap(OptionItem::getWidth()) . PHP_EOL);
         }
     }
 
@@ -508,7 +509,7 @@ class Options
      */
     public function has($str)
     {
-        $arg = self::getArg($str);
+        $arg = self::getOpt($str);
         return
             is_object($arg)
             &&
@@ -538,20 +539,18 @@ class Options
 
 
     /**
-     * getArg 
-     * 
      * @param mixed $str 
      * @static
      * @access public
      * @return void
      */
-    public static function getArg($str)
+    public static function getOpt($str)
     {
         $arg = false;
 
-        if(isset(self::$arr_arg[$str]))
+        if(isset(self::$arr_opt[$str]))
         {
-            $arg = self::$arr_arg[$str];
+            $arg = self::$arr_opt[$str];
         }
         else
         {
@@ -574,7 +573,7 @@ class Options
      */
     public function get($str)
     {
-        $arg = self::getArg($str);
+        $arg = self::getOpt($str);
 
         if(isset($this->arr_parsed[$arg->getLong()]))
         {
