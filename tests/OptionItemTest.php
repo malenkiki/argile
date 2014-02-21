@@ -22,17 +22,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-class ArgTest extends PHPUnit_Framework_TestCase
+class OptionItemTest extends PHPUnit_Framework_TestCase
 {
     public function testSwitchInit()
     {
-        $a = Malenki\Argile\Arg::createSwitch('bar');
+        $a = Malenki\Argile\OptionItem::createSwitch('bar');
         $this->assertFalse($a->isValue());
     }
     
     public function testValueInit()
     {
-        $a = Malenki\Argile\Arg::createValue('foo');
+        $a = Malenki\Argile\OptionItem::createValue('foo');
         $this->assertTrue($a->isValue());
     }
 }
