@@ -27,13 +27,59 @@ namespace Malenki\Argile;
 use \Malenki\Ansi;
 use \Malenki\Bah\S;
 
+/**
+ * Defines options, catches options, outputs help, gets arguments for PHP CLI 
+ * scripts.
+ * 
+ * @copyright 2014 Michel Petit
+ * @author Michel Petit <petit.michel@gmail.com> 
+ * @license MIT
+ */
 class Options
 {
+    /**
+     * Instance of the singleton.
+     *
+     * @var Options 
+     */
     protected static $obj_instance = null;
+
+
+    /**
+     * Defined available options.
+     *  
+     * @var array
+     */
     protected static $arr_opt = array();
+
+
+    /**
+     * Defined options that belong to group. 
+     */
     protected static $arr_group = array();
+
+    /**
+     * Prohibited option internal names.
+     * @static
+     * @var array
+     */
     protected static $arr_prohibited = array('h', 'help', 'version');
+
+    /**
+     * Detected options after parsing.
+     * 
+     * @var array
+     * @access protected
+     */
     protected $arr_parsed = array();
+
+
+    /**
+     * Found argument after parsing. 
+     * 
+     * @var array
+     * @access protected
+     */
     protected $arr_argument = array();
     protected $obj_color = null;
     
@@ -45,6 +91,13 @@ class Options
     protected $str_version = null;
 
         
+    /**
+     * Load the singleton instance. 
+     * 
+     * @static
+     * @access public
+     * @return Options
+     */
     public static function getInstance()
     {
         if(is_null(self::$obj_instance))
@@ -55,6 +108,9 @@ class Options
         return self::$obj_instance;
     }
 
+
+
+
     private function __construct()
     {
         $this->obj_color = new \stdClass();
@@ -63,37 +119,64 @@ class Options
         $this->obj_color->bold = false;
     }
 
+
+
+    /**
+     * Allow flexible output.
+     *
+     * If this method is called, then generated help will fit to the terminal 
+     * width. 
+     * 
+     * @access public
+     * @return Options
+     */
     public function flexible()
     {
         OptionItem::flexible();
+
+        return $this;
     }
 
+
+
+    /**
+     * Set color nmae to use for label rendering. 
+     * 
+     * @param string $str_color Color name, one of available foreground colors 
+     * defined in \Malenki\Ansi
+     *
+     * @access public
+     * @return Options
+     */
     public function labelColor($str_color)
     {
         $this->obj_color->label = $str_color;
+
+        return $this;
     }
 
     public function optColor($str_color)
     {
         $this->obj_color->opt = $str_color;
+
+        return $this;
     }
 
     public function bold()
     {
         $this->obj_color->bold = true;
+
+        return $this;
     }
 
+
+
     /**
-     * Examine les paramètres fournis en ligne de commande.
+     * Parse given options and arguments to the CLI script.
      *
-     * Si aucun paramètre n’est fourni et si cette méthode est appelée sans 
-     * argument, alors l’aide sera afficher d’office. Si un argument vallant 
-     * false est passé, alors l’aide ne sera pas affichée, ce qui permettra 
-     * d’exécuter le reste du programme. 
-     * 
-     * @param boolean $bool_display_help 
+     * @param boolean $bool_display_help Display or not help message if no options
      * @access public
-     * @return void
+     * @return Options
      */
     public function parse($bool_display_help = true)
     {
@@ -201,29 +284,39 @@ class Options
             $this->displayHelp();
         }
 
+
+        return $this;
     }
 
 
     public function noVersion()
     {
         $this->has_version = false;
+
+        return $this;
     }
 
 
     public function addUsage($str)
     {
         $this->arr_usage[] = $str;
+
+        return $this;
     }
 
     public function description($str)
     {
         $this->str_description = $str;
+
+        return $this;
     }
     
     
     public function version($str)
     {
         $this->str_version = $str;
+
+        return $this;
     }
 
     public function addGroup($str_alias, $str_name = null)
@@ -236,6 +329,8 @@ class Options
 
             self::$arr_group[$str_alias] = $grp;
         }
+
+        return $this;
     }
 
     /**
