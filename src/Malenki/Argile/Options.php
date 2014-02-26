@@ -140,7 +140,7 @@ class Options
 
 
     /**
-     * Set color nmae to use for label rendering. 
+     * Set color's name to use for label rendering. 
      * 
      * @param string $str_color Color name, one of available foreground colors 
      * defined in \Malenki\Ansi
@@ -155,6 +155,17 @@ class Options
         return $this;
     }
 
+    
+    
+    /**
+     * Set color's name to use for options' label rendering. 
+     * 
+     * @param string $str_color Color name, one of available foreground colors 
+     * defined in \Malenki\Ansi
+     *
+     * @access public
+     * @return Options
+     */
     public function optColor($str_color)
     {
         $this->obj_color->opt = $str_color;
@@ -162,6 +173,14 @@ class Options
         return $this;
     }
 
+
+
+    /**
+     * Set labels as bold. 
+     * 
+     * @access public
+     * @return Options
+     */
     public function bold()
     {
         $this->obj_color->bold = true;
@@ -289,6 +308,13 @@ class Options
     }
 
 
+
+    /**
+     * Sets script without version information. 
+     * 
+     * @access public
+     * @return Options
+     */
     public function noVersion()
     {
         $this->has_version = false;
@@ -297,6 +323,14 @@ class Options
     }
 
 
+
+    /**
+     * Add one usage case for the synopsis part. 
+     * 
+     * @param string $str A use case with arg/opt
+     * @access public
+     * @return Options
+     */
     public function addUsage($str)
     {
         $this->arr_usage[] = $str;
@@ -304,6 +338,15 @@ class Options
         return $this;
     }
 
+
+
+    /**
+     * Set global description for the help output.
+     * 
+     * @param string $str Description's content
+     * @access public
+     * @return Options
+     */
     public function description($str)
     {
         $this->str_description = $str;
@@ -311,7 +354,15 @@ class Options
         return $this;
     }
     
-    
+
+
+    /**
+     * Set version information about the script. 
+     * 
+     * @param string $str Version information.
+     * @access public
+     * @return Options
+     */
     public function version($str)
     {
         $this->str_version = $str;
@@ -319,6 +370,16 @@ class Options
         return $this;
     }
 
+
+
+    /**
+     * Adds a new group for options. 
+     * 
+     * @param string $str_alias Conding name of the group, to identify it when defining options.
+     * @param string $str_name Optional name to display while rendering help.
+     * @access public
+     * @return Options
+     */
     public function addGroup($str_alias, $str_name = null)
     {
         if(!isset(self::$arr_group[$str_alias]))
@@ -333,11 +394,13 @@ class Options
         return $this;
     }
 
+
+
     /**
-     * add 
+     * Adds one new option.
      * 
-     * @param OptionItem $opt 
-     * @param mixed $str_alias 
+     * @param OptionItem $opt The option.
+     * @param mixed $str_alias Its optional group's alias.
      * @static
      * @access public
      * @return void
@@ -361,6 +424,7 @@ class Options
             }
         }
     }
+
 
 
     protected function getShort()
@@ -414,6 +478,14 @@ class Options
     }
 
 
+    /**
+     * Adds a new option switch.  
+     * 
+     * @param string $name The string to identify and call this option.
+     * @param string $group Optional group's name
+     * @access public
+     * @return OptionItem The newly created option, to chain methods.
+     */
     public function newSwitch($name, $group = null)
     {
         $arg = OptionItem::createSwitch($name);
@@ -434,6 +506,14 @@ class Options
 
 
 
+    /**
+     * Adds a new option's value.
+     * 
+     * @param string $name Option's name.
+     * @param string $group Optional group's name.
+     * @access public
+     * @return OptionItem
+     */
     public function newValue($name, $group = null)
     {
         $arg = OptionItem::createValue($name);
@@ -454,7 +534,7 @@ class Options
 
 
     /**
-     * Créer la chaîne d’utilisation.
+     * Gets the synopsis part.
      * 
      * @access public
      * @return string
@@ -498,7 +578,9 @@ class Options
 
 
     /**
-     * Retourne la description du programme 
+     * Getsthe description part.
+     *
+     * This follows terminal size or not if `flexible()` method was called or not before.
      * 
      * @access public
      * @return string
@@ -516,6 +598,16 @@ class Options
         }
     }
 
+
+
+    /**
+     * Displays full help message. 
+     * 
+     * This follows terminal size or not if `flexible()` method was called or not before.
+     *
+     * @access public
+     * @return void
+     */
     public function displayHelp()
     {
         printf("%s\n", $this->getUsage());
