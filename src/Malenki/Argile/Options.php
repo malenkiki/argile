@@ -506,6 +506,18 @@ class Options
 
 
 
+    public function flag($name, $group = null)
+    {
+        return $this->newSwitch($name, $group);
+    }
+
+
+    public function f($name, $group = null)
+    {
+        return $this->newSwitch($name, $group);
+    }
+
+
     /**
      * Adds a new option's value.
      * 
@@ -531,6 +543,21 @@ class Options
         self::add($arg, $group);
         return self::getOpt($name);
     } 
+
+
+
+    public function val($name, $group = null)
+    {
+        return $this->newValue($name, $group);
+    }
+
+
+
+    public function v($name, $group = null)
+    {
+        return $this->newValue($name, $group);
+    }
+
 
 
     /**

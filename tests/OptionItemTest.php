@@ -22,17 +22,85 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+use Malenki\Argile\OptionItem;
+
 class OptionItemTest extends PHPUnit_Framework_TestCase
 {
+    public function testInstanciateShouldSuccess()
+    {
+        $a = OptionItem::createSwitch('bar');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $a = OptionItem::createValue('foo');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+    }
+
     public function testSwitchInit()
     {
-        $a = Malenki\Argile\OptionItem::createSwitch('bar');
+        $a = OptionItem::createSwitch('bar');
         $this->assertFalse($a->isValue());
     }
     
     public function testValueInit()
     {
-        $a = Malenki\Argile\OptionItem::createValue('foo');
+        $a = OptionItem::createValue('foo');
         $this->assertTrue($a->isValue());
     }
+
+    public function testSettingAsRequiredShouldSuccess()
+    {
+        $a = OptionItem::createValue('foo')->required();
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->isRequired());
+        $a = OptionItem::createValue('foo')->required;
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->isRequired());
+    }
+
+    public function testSettingShortShouldSuccess()
+    {
+        $a = OptionItem::createValue('foo')->short('f');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasShort());
+
+        $a = OptionItem::createSwitch('foo')->short('f');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasShort());
+        
+        $a = OptionItem::createValue('foo')->s('f');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasShort());
+
+        $a = OptionItem::createSwitch('foo')->s('f');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasShort());
+    }
+
+
+
+    public function testGettingShortShouldSuccess()
+    {
+        $a = OptionItem::createValue('foo')->short('f');
+        $this->assertEquals('f', $a->getShort());
+    }
+
+
+    public function testSettingLongShouldSuccess()
+    {
+        $a = OptionItem::createValue('foo')->long('foo');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasLong());
+
+        $a = OptionItem::createSwitch('foo')->long('foo');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasLong());
+        
+        $a = OptionItem::createValue('foo')->l('foo');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasLong());
+
+        $a = OptionItem::createSwitch('foo')->l('foo');
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', $a);
+        $this->assertTrue($a->hasLong());
+    }
+
 }

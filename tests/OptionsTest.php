@@ -22,13 +22,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+use Malenki\Argile\Options;
 
 class OptionsTest extends PHPUnit_Framework_TestCase
 {
     public function testInit()
     {
-        $o = Malenki\Argile\Options::getInstance();
+        $o = Options::getInstance();
         $this->assertTrue(is_object($o));
+        $this->assertInstanceOf('\Malenki\Argile\Options', $o);
     }
     
 }

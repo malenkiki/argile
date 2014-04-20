@@ -86,6 +86,15 @@ class OptionItem
 
 
 
+    public function __get($name)
+    {
+        if($name == 'required')
+        {
+            return $this->required();
+        }
+    }
+
+
     /**
      * @param integer $type
      * @param string  $name
@@ -235,6 +244,13 @@ class OptionItem
 
 
     
+    /**
+     * isRequiredValue 
+     * 
+     * @deprecated
+     * @access public
+     * @return void
+     */
     public function isRequiredValue()
     {
         /*
@@ -247,6 +263,11 @@ class OptionItem
         return $this->bool_required;
     }
 
+
+    public function isRequired()
+    {
+        return $this->bool_required;
+    }
 
 
     /**
@@ -262,6 +283,12 @@ class OptionItem
 
 
 
+    public function s($str)
+    {
+        return $this->short($str);
+    }
+
+
     /**
      * @param string $str
      * @return OptionItem L’objet lui-même est retourné pour chaîner…
@@ -273,6 +300,12 @@ class OptionItem
         return $this;
     }
 
+
+
+    public function l($str)
+    {
+        return $this->long($str);
+    }
 
 
     /**
@@ -292,6 +325,10 @@ class OptionItem
     }
 
 
+    public function h($str, $str_var = null)
+    {
+        return $this->help($str, $str_var);
+    }
 
     /**
      * @return boolean
