@@ -33,5 +33,18 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Malenki\Argile\Options', $o);
     }
     
+    public function testAddSwitchShouldSuccess()
+    {
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', Options::getInstance()->newSwitch('foo'));
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', Options::getInstance()->flag('foo'));
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', Options::getInstance()->f('foo'));
+    }
+    
+    public function testAddValueShouldSuccess()
+    {
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', Options::getInstance()->newValue('foo'));
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', Options::getInstance()->val('foo'));
+        $this->assertInstanceOf('\Malenki\Argile\OptionItem', Options::getInstance()->v('foo'));
+    }
 }
 

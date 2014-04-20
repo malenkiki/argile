@@ -103,4 +103,19 @@ class OptionItemTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($a->hasLong());
     }
 
+
+    public function testGettingLongShouldSuccess()
+    {
+        $a = OptionItem::createValue('foo')->long('foo');
+        $this->assertEquals('foo', $a->getLong());
+    }
+
+
+
+    public function testGettingNameShouldSuccess()
+    {
+        $a = OptionItem::createValue('foo');
+        $this->assertEquals('foo', $a->getName());
+    }
+
 }
