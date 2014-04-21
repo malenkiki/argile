@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "malenki/ansi",
-            "version": "1.2.3",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/malenkiki/ansi.git",
-                "reference": "d3709cc40511d7ef7bc8abfe518835b4163e6177"
+                "reference": "0333e9b36022b1c7da46be0bace2b41ce865df3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/malenkiki/ansi/zipball/d3709cc40511d7ef7bc8abfe518835b4163e6177",
-                "reference": "d3709cc40511d7ef7bc8abfe518835b4163e6177",
+                "url": "https://api.github.com/repos/malenkiki/ansi/zipball/0333e9b36022b1c7da46be0bace2b41ce865df3c",
+                "reference": "0333e9b36022b1c7da46be0bace2b41ce865df3c",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "cli",
                 "colors"
             ],
-            "time": "2014-01-21 22:59:16"
+            "time": "2014-03-03 12:56:07"
         },
         {
             "name": "malenki/bah",

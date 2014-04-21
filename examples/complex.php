@@ -18,27 +18,19 @@ $opt->version('Some App Version 1.0');
 $opt->addGroup('one', 'Optional title for first group');
 $opt->addGroup('two', 'Optional title for second group');
 
-$opt->newSwitch('switch', 'one')
-    ->short('s')
-    ->help('I am a very simple switch arg with only short form.')
-    ;
+$opt->flag('switch', 'one')->s('s')->h('I am a very simple switch arg with only short form.') ;
 
-$opt->newSwitch('switch2', 'one')
-    ->short('n')
-    ->long('i-am-very-long-option-baby')
-    ->help('I am a very simple switch arg with only short form but my long form is very, very, very long.')
+$opt->flag('switch2', 'one')->s('n')->l('i-am-very-long-option-baby')
+    ->h('I am a very simple switch arg with only short form but my long form is very, very, very long.')
     ;
-$opt->newValue('foo', 'two')
-    ->required()
-    ->short('f')
-    ->long('foo')
+$opt->val('foo', 'two')->required->short('f')->long('foo')
     ->help('I am a simple required arg with short and long forms.')
     ;
 
-$opt->newValue('bar', 'two')
-    ->short('b')
-    ->long('bar')
-    ->help('I am a simple optional arg with short and long forms. I have custom help variable too.', 'something')
+$opt->val('bar', 'two')->short('b')->long('bar')->help(
+    'I am a simple optional arg with short and long forms. I have custom help variable too.',
+    'something'
+)
     ;
 
 
