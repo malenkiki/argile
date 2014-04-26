@@ -3,7 +3,6 @@
 
 (@include_once __DIR__ . '/../vendor/autoload.php') || @include_once __DIR__ . '/../../../autoload.php';
 
-
 $opt = Malenki\Argile\Options::getInstance();
 
 $opt->flexible();
@@ -41,27 +40,20 @@ $opt->newValue('bar', 'two')
     ->help('I am a simple optional arg with short and long forms. I have custom help variable too.', 'something')
     ;
 
-
 $opt->parse();
 
-if($opt->has('switch'))
-{
+if ($opt->has('switch')) {
     printf("\n\"switch\" arg selected!\n\n");
 }
 
-if($opt->has('foo'))
-{
+if ($opt->has('foo')) {
     printf("\n\"foo\" arg selected! Its value is: \"%s\"\n\n", $opt->get('foo'));
 }
 
-if($opt->has('bar'))
-{
-    if($opt->get('bar'))
-    {
+if ($opt->has('bar')) {
+    if ($opt->get('bar')) {
         printf("\n\"bar\" arg selected! Its value is: \"%s\"\n\n", $opt->get('bar'));
-    }
-    else
-    {
+    } else {
         printf("\n\"bar\" arg selected! Given without value.\n\n");
     }
 }
